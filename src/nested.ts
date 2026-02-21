@@ -1,5 +1,6 @@
 import { Answer } from "./interfaces/answer";
 import { Question, QuestionType } from "./interfaces/question";
+import { makeBlankQuestion } from "./objects";
 
 /**
  * Consumes an array of questions and returns a new array with only the questions
@@ -99,7 +100,8 @@ export function addNewQuestion(
     name: string,
     type: QuestionType,
 ): Question[] {
-    return [];
+    const copy = [...questions, makeBlankQuestion(id, name, type)];
+    return copy;
 }
 
 /***
@@ -114,7 +116,9 @@ export function renameQuestionById(
     targetId: number,
     newName: string,
 ): Question[] {
-    return [];
+    return questions.map((question) =>
+        question.id === targetId ? { ...question, name: newName } : question,
+    );
 }
 
 /**
@@ -135,5 +139,27 @@ export function editOption(
     targetOptionIndex: number,
     newOption: string,
 ): Question[] {
-    return [];
+    return questions.map((question) => {
+        if (question.id !== targetId) {
+            return question;
+        }
+
+        let updatedOptions: string[];
+        if (targetOptionIndex === -1) {
+            updatedOptions = [...question.options, newOption];
+        } else if (
+            targetOptionIndex >= 0 &&
+            targetOptionIndex < question.options.length
+        ) {
+            updatedOptions = question.options.map((opt, idx) =>
+                idx === targetOptionIndex ? newOption : opt,
+            );
+        } else {
+            updatedOptions = [...question.options];
+        }
+        return {
+            ...question,
+            options: updatedOptions,
+        };
+    });
 }
