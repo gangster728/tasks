@@ -45,7 +45,10 @@ export function findQuestion(
  * Hint: use filter
  */
 export function removeQuestion(questions: Question[], id: number): Question[] {
-    return [];
+    const copy = [...questions];
+    return copy.filter((q) => {
+        return !(q.id === id);
+    });
 }
 
 /***
@@ -54,7 +57,9 @@ export function removeQuestion(questions: Question[], id: number): Question[] {
  * Do not modify the input array.
  */
 export function getNames(questions: Question[]): string[] {
-    return [];
+    return questions.map((q) => {
+        return q.name;
+    });
 }
 
 /**
@@ -63,7 +68,12 @@ export function getNames(questions: Question[]): string[] {
  * making the `text` an empty string, and using false for both `submitted` and `correct`.
  */
 export function makeAnswers(questions: Question[]): Answer[] {
-    return [];
+    return questions.map((q) => ({
+        questionId: q.id,
+        text: "",
+        submitted: false,
+        correct: false,
+    }));
 }
 
 /***
@@ -72,7 +82,9 @@ export function makeAnswers(questions: Question[]): Answer[] {
  * Hint: as usual, do not modify the input questions array
  */
 export function publishAll(questions: Question[]): Question[] {
-    return [];
+    return questions.map((q) => {
+        return { ...q, published: true };
+    });
 }
 
 /***
